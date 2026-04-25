@@ -2,7 +2,7 @@ import functools
 import random
 
 from app.data import FREE_SPACE, QUESTIONS
-from app.models import BingoLine, BingoSquareData
+from app.models import BingoLine, BingoSquareData, HuntItem
 
 BOARD_SIZE = 5
 CENTER_INDEX = 12  # 5x5 grid, center is index 12 (row 2, col 2)
@@ -48,6 +48,35 @@ def _get_winning_lines() -> tuple[BingoLine, ...]:
     lines.append(BingoLine(type="diagonal", index=1, squares=[4, 8, 12, 16, 20]))
 
     return tuple(lines)
+
+
+def generate_hunt_checklist() -> list[HuntItem]:
+    """Generate list of 24 shuffled questions as hunt items."""
+    questions = random.sample(QUESTIONS, 24)
+    return [HuntItem(id=i, text=q) for i, q in enumerate(questions)]
+
+
+def toggle_hunt_item(items: list[HuntItem], item_id: int) -> list[HuntItem]:
+    """Toggle checked state of hunt item."""
+    return [
+        item.model_copy(update={"is_checked": not item.is_checked})
+        if item.id == item_id
+        else item
+        for item in items
+    ]
+
+
+def calculate_hunt_progress(items: list[HuntItem]) -> float:
+    """Returns percentage 0-100 of checked items."""
+    if not items:
+        return 0.0
+    checked = sum(1 for item in items if item.is_checked)
+    return (checked / len(items)) * 100
+
+
+def draw_random_card() -> str:
+    """Draw a random question from the deck."""
+    return random.choice(QUESTIONS)
 
 
 def check_bingo(board: list[BingoSquareData]) -> BingoLine | None:

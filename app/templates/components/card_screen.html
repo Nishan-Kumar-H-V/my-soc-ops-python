@@ -1,0 +1,29 @@
+<div id="game-container">
+  <div class="flex flex-col min-h-full bg-batcave">
+    <header class="flex items-center justify-between p-4 border-b border-white/10 bg-surface">
+      <div>
+        <p class="uppercase text-xs text-accent mb-1">Card Deck</p>
+        <h1 class="text-2xl font-bold">Shuffle Mode</h1>
+      </div>
+      <button hx-post="/reset" hx-target="#game-container" hx-swap="outerHTML"
+              class="bat-button-secondary">
+          ← Back
+      </button>
+    </header>
+    
+    <div class="flex-1 flex items-center justify-center p-4">
+      <div class="w-full max-w-md card-container">
+        <div class="rounded-xl p-8 text-center card-flip cyberpunk-card">
+          <div class="mb-6">
+            <p class="text-lg text-muted mb-4">Your Card:</p>
+            <p class="text-xl font-semibold text-white">{{ session.current_card }}</p>
+          </div>
+          <button hx-post="/shuffle-card" hx-target="#game-container" hx-swap="outerHTML"
+                  class="bat-button w-full">
+            Shuffle
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

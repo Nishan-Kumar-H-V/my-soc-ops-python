@@ -198,6 +198,56 @@ button:disabled {
     transition: background 150ms ease, transform 150ms ease;
 }
 .bat-button-secondary:hover { background: rgba(247, 192, 11, 0.14); transform: translateY(-1px); }
+
+/* 3D Card Flip Animation */
+.card-container {
+    perspective: 1000px;
+}
+
+.card-flip {
+    animation: flip 0.6s ease-in-out;
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(90deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+
+.cyberpunk-card {
+    background: linear-gradient(135deg, rgba(15, 18, 30, 0.95), rgba(11, 13, 22, 0.98));
+    border: 2px solid rgba(247, 192, 11, 0.4);
+    box-shadow: 
+        0 0 20px rgba(247, 192, 11, 0.2),
+        0 0 40px rgba(247, 192, 11, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.cyberpunk-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--accent), #00ffff, var(--accent), #ff00ff);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.3;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    0% { opacity: 0.3; }
+    100% { opacity: 0.6; }
+}
 .bat-button-secondary:active { transform: scale(0.98); }
 .hero-overlay { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at top center, rgba(247, 192, 11, 0.14), transparent 28%); }
 .panel-ghost { background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.08); }
@@ -240,4 +290,63 @@ button:disabled {
 
 .animate-\[bounce_0\.5s_ease-out\] {
     animation: bounce 0.5s ease-out;
+}
+
+/* New animations for engaging landing page */
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slide-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(247, 192, 11, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(247, 192, 11, 0.5); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-slide-up {
+    animation: slide-up 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Enhanced hero overlay with more atmospheric depth */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at top center, rgba(247, 192, 11, 0.18), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.04), transparent 20%),
+        linear-gradient(135deg, rgba(247, 192, 11, 0.06) 0%, transparent 50%);
+}
+
+/* Subtle hover lift for panels */
+.panel-ghost {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.panel-ghost:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(247, 192, 11, 0.15);
 }

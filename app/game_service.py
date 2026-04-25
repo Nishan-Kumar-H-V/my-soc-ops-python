@@ -1,12 +1,16 @@
 from dataclasses import dataclass, field
 
 from app.game_logic import (
+    calculate_hunt_progress,
     check_bingo,
+    draw_random_card,
     generate_board,
+    generate_hunt_checklist,
     get_winning_square_ids,
+    toggle_hunt_item,
     toggle_square,
 )
-from app.models import BingoLine, BingoSquareData, GameState
+from app.models import BingoLine, BingoSquareData, GameState, HuntItem
 
 
 @dataclass
@@ -17,6 +21,8 @@ class GameSession:
     board: list[BingoSquareData] = field(default_factory=list)
     winning_line: BingoLine | None = None
     show_bingo_modal: bool = False
+    hunt_items: list[HuntItem] = field(default_factory=list)
+    current_card: str = ""
 
     @property
     def winning_square_ids(self) -> set[int]:
@@ -25,6 +31,10 @@ class GameSession:
     @property
     def has_bingo(self) -> bool:
         return self.game_state == GameState.BINGO
+
+    @property
+    def hunt_progress_percentage(self) -> int:
+        return int(calculate_hunt_progress(self.hunt_items))
 
     def start_game(self) -> None:
         self.board = generate_board()
@@ -44,11 +54,29 @@ class GameSession:
                 self.game_state = GameState.BINGO
                 self.show_bingo_modal = True
 
+    def start_hunt(self) -> None:
+        self.hunt_items = generate_hunt_checklist()
+        self.game_state = GameState.HUNT
+
+    def handle_hunt_click(self, item_id: int) -> None:
+        if self.game_state == GameState.HUNT:
+            self.hunt_items = toggle_hunt_item(self.hunt_items, item_id)
+
+    def start_card(self) -> None:
+        self.current_card = draw_random_card()
+        self.game_state = GameState.CARD
+
+    def shuffle_card(self) -> None:
+        if self.game_state == GameState.CARD:
+            self.current_card = draw_random_card()
+
     def reset_game(self) -> None:
         self.game_state = GameState.START
         self.board = []
         self.winning_line = None
         self.show_bingo_modal = False
+        self.hunt_items = []
+        self.current_card = ""
 
     def dismiss_modal(self) -> None:
         self.show_bingo_modal = False

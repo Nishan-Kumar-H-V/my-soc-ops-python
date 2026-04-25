@@ -74,6 +74,42 @@ async def dismiss_modal(request: Request) -> Response:
     )
 
 
+@app.post("/start-hunt", response_class=HTMLResponse)
+async def start_hunt(request: Request) -> Response:
+    session = _get_game_session(request)
+    session.start_hunt()
+    return templates.TemplateResponse(
+        request, "components/hunt_screen.html", {"session": session}
+    )
+
+
+@app.post("/toggle-hunt/{item_id}", response_class=HTMLResponse)
+async def toggle_hunt(request: Request, item_id: int) -> Response:
+    session = _get_game_session(request)
+    session.handle_hunt_click(item_id)
+    return templates.TemplateResponse(
+        request, "components/hunt_screen.html", {"session": session}
+    )
+
+
+@app.post("/start-card", response_class=HTMLResponse)
+async def start_card(request: Request) -> Response:
+    session = _get_game_session(request)
+    session.start_card()
+    return templates.TemplateResponse(
+        request, "components/card_screen.html", {"session": session}
+    )
+
+
+@app.post("/shuffle-card", response_class=HTMLResponse)
+async def shuffle_card(request: Request) -> Response:
+    session = _get_game_session(request)
+    session.shuffle_card()
+    return templates.TemplateResponse(
+        request, "components/card_screen.html", {"session": session}
+    )
+
+
 def run() -> None:
     """Entry point for the application."""
     import uvicorn

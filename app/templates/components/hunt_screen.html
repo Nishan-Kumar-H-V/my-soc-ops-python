@@ -1,0 +1,44 @@
+<div id="game-container">
+  <div class="flex flex-col min-h-full bg-batcave">
+    <header class="flex items-center justify-between p-4 border-b border-white/10 bg-surface">
+      <div>
+        <p class="uppercase text-xs text-accent mb-1">Hunt Mode</p>
+        <h1 class="text-2xl font-bold">Mission List</h1>
+      </div>
+      <button hx-post="/reset" hx-target="#game-container" hx-swap="outerHTML"
+              class="bat-button-secondary">
+          ← Back
+      </button>
+    </header>
+    
+    <div class="p-4">
+      <div class="rounded-xl border border-accent panel-ghost p-4">
+        <div class="flex justify-between items-center mb-2">
+          <p class="text-sm text-muted">Mission Progress</p>
+          <p class="text-lg font-bold text-accent">{{ session.hunt_progress_percentage }}%</p>
+        </div>
+        <div class="w-full bg-black/40 rounded-full h-2 overflow-hidden">
+          <div class="progress-bar h-full rounded-full transition-all duration-300"
+               style="width: {{ session.hunt_progress_percentage }}%; background: linear-gradient(90deg, var(--accent), #e5b702);"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-4 space-y-2">
+        {% for item in session.hunt_items %}
+        <div class="flex items-center space-x-3 p-3 rounded-lg border border-white/10 bg-surface/50 hover:bg-surface/70 transition-colors">
+          <input type="checkbox" 
+                 id="item-{{ item.id }}" 
+                 {% if item.is_checked %}checked{% endif %}
+                 hx-post="/toggle-hunt/{{ item.id }}" 
+                 hx-target="#game-container" 
+                 hx-swap="outerHTML"
+                 class="w-5 h-5 text-accent bg-gray-100 border-gray-300 rounded focus:ring-accent focus:ring-2">
+          <label for="item-{{ item.id }}" class="flex-1 text-sm cursor-pointer">{{ item.text }}</label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,6 +8,8 @@ class GameState(StrEnum):
     START = "start"
     PLAYING = "playing"
     BINGO = "bingo"
+    HUNT = "hunt"
+    CARD = "card"
 
 
 class BingoSquareData(BaseModel):
@@ -29,3 +31,13 @@ class BingoLine(BaseModel):
     type: Literal["row", "column", "diagonal"] = "row"
     index: int = 0
     squares: list[int] = []
+
+
+class HuntItem(BaseModel):
+    """A single item in the hunt checklist."""
+
+    model_config = ConfigDict(frozen=True)
+
+    id: int
+    text: str
+    is_checked: bool = False
